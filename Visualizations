@@ -1,0 +1,190 @@
+import pandas as pd 
+import numpy as np
+import altair as alt
+import vega_datasets
+from vega_datasets import data
+from datetime import datetime
+import yfinance as yahooFinance
+
+
+## Prep for Visualizations
+#Function to pull stock data
+def download_stock_data(tickers, start_date, end_date):
+    stock_data=[]
+    for ticker in tickers:
+        data=yahooFinance.download(ticker, start=start_date, end=end_date, interval='1d')
+        data['Ticker']=ticker
+        stock_data.append(data)
+    return pd.concat(stock_data,axis=0)
+
+#Function to Get Volatility for Visualization
+def calculate_volatility(df):
+    df['Volatility']=((((np.log(df['High'])-
+             np.log(df['Low']))**2)/2)-
+            ((2*np.log(2))-1)*((np.log(df['Adj Close'])
+            -np.log(df['Open']))**2))*1000000
+    return df
+
+#Defining variables
+start_time= '2022-03-01'
+current_time= datetime.now()
+
+stock_list=['AVGO','IBM','ORCL','CRM','TSLA','COF','GS','NVDA','NKE','GM','ILMN']
+
+#Downloading data
+stock_df=download_stock_data(stock_list, start_time, current_time)
+stock_df=calculate_volatility(stock_df)
+
+
+
+
+
+
+
+## First Visualization (Altair)
+# Defined date slider that adjusts based on days from today
+date_slider = alt.binding_range(
+    name="Days from Today: ",
+    min=stock_df['Days_From_Today'].min()+7,
+    max=stock_df['Days_From_Today'].max(),
+    step=1
+)
+
+# Selection for date_slider
+date_select = alt.selection_point(
+    bind=date_slider,
+    fields=['Days_From_Today'],
+    value=stock_df['Days_From_Today'].min()+7
+)
+
+# Defined ticker symbol drop-down 
+ticker_dropdown = alt.binding_select(
+    options =  stock_list+[None],
+    labels =  stock_list+['All Stocks'],
+    name = "Ticker Symbol"
+)
+
+# Created selection for ticker_dropdown
+ticker_select = alt.selection_point(
+    bind=ticker_dropdown,
+    fields=['Ticker'],
+    value='AVGO'
+)
+
+# Created top chart that shows stock closing prices
+base = alt.Chart(stock_df).mark_line().encode(
+    x='Date:T',
+    y=alt.Y('Close:Q', title='Closing Price'),
+    color=alt.Color('Ticker:N').scale(domain=stock_list),
+    tooltip=['Ticker:N','Date:T', 'Close:Q']
+).properties(width=500, height=200)
+
+# Bottom chart that shows stock's volatility and VIX indicators
+base1 = alt.Chart(merged_df).mark_line().encode(
+    x='Date:T',
+    y=alt.Y('Volatility:Q', title='Volatility'),
+    color=alt.Color('Ticker:N').scale(domain=stock_list),
+    tooltip=['Ticker:N','Date:T','Volatility:Q', 'Emoji:N']
+).properties(width=500, height=200)
+
+# Apply filters to the charts based on the selected ticker and date
+filtered_base = (base).add_params(ticker_select, date_select).transform_filter(
+    ticker_select).transform_filter(
+    alt.datum.Days_From_Today <= date_select['Days_From_Today']
+).interactive()
+
+
+
+filtered_base1 = base1.add_params(ticker_select, date_select).transform_filter(
+    ticker_select
+).transform_filter(
+    alt.datum.Days_From_Today <= date_select['Days_From_Today']
+)
+
+# Combine the two charts vertically
+final_charts = alt.vconcat(filtered_base, filtered_base1).resolve_scale(
+    y='independent'
+)
+
+
+
+
+
+## Second Visualization (Plotly)
+news_df=pd.concat([daily_sentiment_summary, ibm_sentiment_summary, crm_sentiment_summary, avgo_sentiment_summary],axis=0) ## Update with news data you have
+average_news_df=pd.DataFrame(news_df.groupby(['Ticker','date'])['avg_sentiment_score'].agg(lambda x: np.mean(x)))
+average_news_df.reset_index(inplace=True)
+
+#Prepping dictionary for Plotly table display
+sentiment_for_plot = {
+    ticker: {"Metric":["Today", "Yesterday", "Last 3 Days", "Past Week", "Past 2 Weeks"],
+        "Average News Sentiment Score": [
+        np.round(average_news_df[average_news_df['Ticker']==ticker].iloc[-1]['avg_sentiment_score'],3),
+        np.round(average_news_df[average_news_df['Ticker']==ticker].iloc[-2]['avg_sentiment_score'],3),
+        np.round(np.average(average_news_df[average_news_df['Ticker']==ticker].iloc[-3:]['avg_sentiment_score']),3),  
+        np.round(np.average(average_news_df[average_news_df['Ticker']==ticker].iloc[-7:]['avg_sentiment_score']),3),
+        np.round(np.average(average_news_df[average_news_df['Ticker']==ticker].iloc[-14:]['avg_sentiment_score']),3)
+        ]
+    }
+    for ticker in df['Ticker'].unique()
+}
+
+#Chart set-up
+fig = go.Figure()
+
+for ticker in range(len(df['Ticker'].unique())):
+    fig.add_trace(go.Table(
+        header=dict(
+                values=["Metric", "Average News Sentiment Score"],
+            fill_color='lightgray',
+            font=dict(size=10),
+            align='center'
+        ),
+        cells=dict(
+            values=[sentiment_for_plot[df['Ticker'].unique()[i]]["Metric"], sentiment_for_plot[df['Ticker'].unique()[i]]["Average News Sentiment Score"]],
+            fill_color='white',
+            font=dict(size=10),
+            align='center'
+        )
+    ))
+
+#Adding buttons
+fig.update_layout(
+    updatemenus=[
+        dict(
+            type="buttons",
+            direction="down",
+            active=0,
+            x=-0.025,
+            y=1,
+            buttons=list([
+                dict(label="ORCL", ## Update with news data you have
+                     method="update",
+                     args=[{"visible": [True, False, False, False]},
+                           {"title": "", #Will Update
+                }]),
+                dict(label="IBM",
+                     method="update",
+                     args=[{"visible": [False, True, False, False]},
+                           {"title": "",#Will Update
+                }]),
+                dict(label="CRM", ## Update with news data you have
+                     method="update",
+                     args=[{"visible": [False, False, True, False]},
+                           {"title": ""#Will Update
+                           }]),
+                dict(label="AVGO", ## Update with news data you have
+                     method="update",
+                     args=[{"visible": [False, False, False, True]},
+                           {"title": ""#Will Update
+                }]),
+            ]),
+        )
+    ],
+    width=400,
+    height=400,
+    margin=dict(l=20, r=20, t=50, b=20)
+)
+
+#Plotting table
+fig.show()
