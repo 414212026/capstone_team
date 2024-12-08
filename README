@@ -36,22 +36,19 @@ command to run: python 00_get_econ_sentiment_by_api.py
 Outputs: data saved in the data/ directory.
 
 3.2 Data Preparation:
-File: 01_final_1_voo_1_data_prepared.py
-(similar files: 02_final_2_tsla_1_data_prepared.py,...,13_final_13_regn_1_data_prepared.py)
+File: 01_final_1_voo_1_data_prepared.py, 02_final_2_tsla_1_data_prepared.py,..., 13_final_13_regn_1_data_prepared.py
 Purpose: Fetch and preprocess the necessary data, including economic and sentiment data.
 Command to run: python 01_final_1_voo_1_data_prepared.py
 Outputs: Cleaned datasets saved in the data/ directory.
 
 3.3 Model Training and Evaluation:
-File: 14_final_1_voo_2_model_1_price_alone.py
-(similar files: 15_final_1_voo_2_model_2_all_variables.py,...,39_final_13_regn_2_model_2_all_variables.py)
+File: 14_final_1_voo_2_model_1_price_alone.py, 15_final_1_voo_2_model_2_all_variables.py,..., 39_final_13_regn_2_model_2_all_variables.py
 Purpose: Train LSTM, ARIMA, and hybrid models (e.g., LSTM-XGBoost).
 Command to run: python 14_final_1_voo_2_model_1_price_alone.py
 Outputs: Trained models saved in the models/ directory and Evaluation metrics logged.
 
 3.4 Results and Visualization:
-File: 40_final_summary_results.py
-(similar files: 41_final_trading_strategy.py, 42_prediction_model_result_charts.py and Visualizations.py)
+File: 40_final_summary_results.py, 41_final_trading_strategy.py, 42_prediction_model_result_charts.py and 43_dashboard_visualization_code
 Purpose: Generate predictions, calculate metrics (e.g., MSE, R²), and create figures.
 Command to run: python 40_final_summary_results.py
 Outputs: Predictions are saved as CSV files in the results/ directory and Plots and figures are saved in the figures/ directory.
