@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lato', sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 60px; /* collapsed width */
+            background-color: #004d4d;
+            overflow-x: hidden;
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            z-index: 999;
+        }
+
+        .sidebar:hover {
+            width: 220px; /* expanded width */
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+            padding: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #006666;
+        }
+
+        .sidebar a span.icon {
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar a span.text {
+            margin-left: 10px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            white-space: normal; /* Allows wrapping */
+            max-width: 190px;
+            overflow-wrap: break-word;
+        }
+
+        .sidebar:hover a span.text {
+            opacity: 1;
+        }
+
+        header, main, footer {
+            margin-left: 60px; 
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar:hover ~ header,
+        .sidebar:hover ~ main,
+        .sidebar:hover ~ footer {
+            margin-left: 220px; 
+        }
+
+        header {
+            background: #006666; 
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        main h2 {
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: #004d4d;
+        }
+
+        main h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: #005757;
+        }
+
+        main p {
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #e0f2f2;
+            font-weight: 700;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin: 40px 0;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                font-size: 16px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            main h2 {
+                font-size: 1.5rem;
+            }
+
+            table, table th, table td {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="/" class="active">
+            <span class="icon">🏠</span>
+            <span class="text">Home</span>
+        </a>
+        <a href="portfolio_overview">
+            <span class="icon">💼</span>
+            <span class="text">Portfolio Overview</span>
+        </a>
+        <a href="historic_stock_performance">
+            <span class="icon">📊</span>
+            <span class="text">Historic Stock Performance</span>
+        </a>
+        <a href="economic_data_&_news_sentiment">
+            <span class="icon">📰</span>
+            <span class="text">Economic Data & News Sentiment</span>
+        </a>
+    </div>
+
+    <header>
+        <h1>Team Billionaires</h1>
+    </header>
+
+    <main>
+        <h2>Disclaimer</h2>
+        <p>
+            This is an educational introduction to our investment strategy including definitions of the trading strategies and sell-out conditions. Please note that the returns presented are not guaranteed and are subject to market fluctuations.
+        </p>
+
+        <h2>Trading Strategy</h2>
+        <p>
+            Our trading strategy leverages the best-performing model for each of our 13 stocks to design a dynamic investment approach tailored to three risk levels: low, medium, and high. Starting with 100% of our portfolio invested in VOO (S&P 500), our strategy then adjusts our positions daily based on model predictions. Buy and sell decisions are executed using the next day’s opening prices to reflect real-world trading constraints and avoid data leakage. The ultimate goal is to outperform a standard automatic investment plan (AIP) through dynamic position reallocation.
+        </p>
+
+        <h3>Risk Levels</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Risk Level</th>
+                    <th>Reasoning</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Low</td>
+                    <td>Focuses on stability by minimizing volatility to maintain consistency</td>
+                    <td>90% VOO, up to 10% reallocated into eligible stocks</td>
+                </tr>
+                <tr>
+                    <td>Medium</td>
+                    <td>Balances stability and volatility for moderate growth with controlled risk</td>
+                    <td>80% VOO, up to 20% reallocated into eligible stocks</td>
+                </tr>
+                <tr>
+                    <td>High</td>
+                    <td>Targets aggressive growth by accepting higher volatility to maximize returns</td>
+                    <td>50% VOO, up to 50% reallocated into eligible stocks</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Trading Cases</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Prediction</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>VOO’s return is below short threshold</td>
+                    <td>Reallocate a portion of VOO into eligible stocks with positive predictions</td>
+                </tr>
+                <tr>
+                    <td>VOO’s return is between short threshold and 0</td>
+                    <td>Reallocate a smaller portion of VOO into eligible stocks with positive predictions</td>
+                </tr>
+                <tr>
+                    <td>VOO’s return is positive</td>
+                    <td>May still reallocate a portion of VOO if eligible stocks have extremely strong positive predictions</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Sell-Out Conditions</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Condition</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Stock Below Threshold</td>
+                    <td>Liquidate and reinvest into VOO</td>
+                </tr>
+                <tr>
+                    <td>Risk Adjustment</td>
+                    <td>If total capital in stocks surpasses allowed risk, liquidate excess into VOO</td>
+                </tr>
+                <tr>
+                    <td>End-of-Day Adjustment</td>
+                    <td>Positions that become ineligible are liquidated daily</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>
+            By dynamically reallocating capital based on predictions and market conditions, this strategy adapts to varying risk tolerances while maintaining a disciplined approach.
+        </p>
+    </main>
+
+    <footer>
+    </footer>
+</body>
+</html>
