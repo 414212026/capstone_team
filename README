@@ -55,5 +55,4 @@ Outputs: Predictions are saved as CSV files in the results/ directory and Plots 
 
 4. Output
 Predictions and evaluation metrics (e.g., MSE, R², Sharpe Ratio) are saved as CSV files.
-Figures are generated and saved in the figures directory.
-Dashboards are generated and saved in the dashboard directory. 
+Figures are generated and saved in the figures directory. Dashboard related figures are also saved in the dashboard directory. 
